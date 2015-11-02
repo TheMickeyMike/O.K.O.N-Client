@@ -9,12 +9,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.roundstarstudio.maciej.okon.R;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
     private Button logInButton;
+    private TextView registerLink;
+
+    private UserLocalStore userLocalStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +33,30 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initializing Log In button and add Click Listener
         logInButton = (Button) findViewById(R.id.logInButton);
-        logInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startMainActivity();
-            }
-        });
+        logInButton.setOnClickListener(this);
 
+        //Init register link
+        registerLink = (TextView) (findViewById(R.id.registerLinkTextView));
+        registerLink.setOnClickListener(this);
+
+        //Init LocalStore, we need to pass Context
+        userLocalStore = new UserLocalStore(this);
+
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.logInButton:
+
+
+                startActivity(new Intent(this,MainActivity.class));
+                break;
+            case R.id.registerLinkTextView:
+                startActivity(new Intent(this,RegisterActivity.class));
+                break;
+        }
 
     }
 

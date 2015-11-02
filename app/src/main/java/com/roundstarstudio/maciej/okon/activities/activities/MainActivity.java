@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
 
+    private UserLocalStore userLocalStore;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -127,6 +129,23 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+
+        //Init LocalStore, we need to pass Context
+        userLocalStore = new UserLocalStore(this);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (authenticate()) {
+            //TODO Start showing posts
+        } else {
+            startActivity(new Intent(MainActivity.this,LoginActivity.class));
+        }
+    }
+
+    private boolean authenticate() {
+        return userLocalStore.getUserLoggedIn();
+    }
 }
