@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.roundstarstudio.maciej.okon.activities.activities.LoginActivity"
+    tools:context=".activities.ui.activities.LoginActivity"
     tools:showIn="@layout/activity_login"
     android:orientation="vertical">
 
@@ -23,6 +23,7 @@
         android:layout_gravity="center_horizontal" />
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/emailTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -36,6 +37,7 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/passwordTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText

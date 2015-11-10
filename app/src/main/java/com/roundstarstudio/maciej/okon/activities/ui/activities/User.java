@@ -1,4 +1,4 @@
-package com.roundstarstudio.maciej.okon.activities.activities;
+package com.roundstarstudio.maciej.okon.activities.ui.activities;
 
 /**
  * Created by Maciej on 02.11.15.

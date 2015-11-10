@@ -1,4 +1,4 @@
-package com.roundstarstudio.maciej.okon.activities.activities;
+package com.roundstarstudio.maciej.okon.activities.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;

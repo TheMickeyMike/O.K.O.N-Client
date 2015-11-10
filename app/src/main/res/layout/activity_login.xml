@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.roundstarstudio.maciej.okon.activities.activities.LoginActivity">
+    tools:context=".activities.ui.activities.LoginActivity"
+    android:id="@+id/coordinatorLayout">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
