@@ -122,13 +122,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     int statusCode = response.code();
                     AccessToken accessToken = response.body();
 
-                    userLocalStore.storeAccessToken(accessToken.getAccess_token());
+                    // Save token to shared prefernces
+                    userLocalStore.storeAccessToken(accessToken.getAccess_token(),accessToken.getToken_type());
                     userLocalStore.setUserLoggedIn(true);
-                    setResult(Activity.RESULT_OK);
 
+                    Intent returnIntent = new Intent();
+                    setResult(Activity.RESULT_OK, returnIntent);
 
                     System.out.println(statusCode);
                     System.out.println(accessToken.getAccess_token() + "   " + accessToken.getToken_type() + "  ");
+
+                    finish(); // Finish Activity
+
 
                 } else {
                     Snackbar snackbar = Snackbar
