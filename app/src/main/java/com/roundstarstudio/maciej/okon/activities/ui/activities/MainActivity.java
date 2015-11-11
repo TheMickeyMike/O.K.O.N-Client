@@ -164,4 +164,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void loadUserInfo() {
+
+    }
 }

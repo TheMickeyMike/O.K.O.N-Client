@@ -28,8 +28,8 @@ public interface OkonService {
 
     @GET("/statuses/feed")
     Call<List<Status>> getFeed(@Query("count") int count,
-                             @Query("min_id") int min_id,
-                             @Query("max_id") int max_id);
+                               @Query("min_id") int min_id,
+                               @Query("max_id") int max_id);
 
     @GET("/statuses/{userid}")
     Call<List<Status>> getUserFeed(@Path("userid") String user_id);
@@ -46,6 +46,9 @@ public interface OkonService {
 
 
     /*Users*/
+
+    @GET("/users/me")
+    Call<User> getMe();
 
     @GET("/users/recent/{id}")
     Call<List<Status>> getPrivateFeed(@Path("id") int id,
