@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     AccessToken accessToken = response.body();
 
                     // Save token to shared prefernces
-                    userLocalStore.storeAccessToken(accessToken.getAccess_token(),accessToken.getToken_type());
+                    userLocalStore.storeAccessToken(accessToken.getAccess_token());
                     userLocalStore.setUserLoggedIn(true);
 
                     Intent returnIntent = new Intent();

@@ -14,10 +14,9 @@ public class UserLocalStore {
         userLocalDatabase = context.getSharedPreferences(SP_NAME,0);
     }
 
-    public void storeAccessToken(String accessToken, String tokenType) {
+    public void storeAccessToken(String accessToken) {
         SharedPreferences.Editor spEditor = userLocalDatabase.edit();
         spEditor.putString("accessToken", accessToken);
-        spEditor.putString("tokenType", tokenType);
         spEditor.commit();
     }
 

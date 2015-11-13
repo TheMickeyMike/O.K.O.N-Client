@@ -3,6 +3,7 @@ package com.roundstarstudio.maciej.okon.activities.ui.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -10,12 +11,30 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.roundstarstudio.maciej.okon.R;
+import com.roundstarstudio.maciej.okon.activities.api.AuthInterceptor;
+import com.roundstarstudio.maciej.okon.activities.api.OkonService;
 import com.roundstarstudio.maciej.okon.activities.api.model.AccessToken;
+import com.roundstarstudio.maciej.okon.activities.api.model.User;
+import com.squareup.okhttp.OkHttpClient;
+
+
+import java.io.IOException;
+
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,8 +42,15 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
+    private TextView usernameTV, emailTV;
+
+    private CoordinatorLayout coordinatorLayout;
 
     private UserLocalStore userLocalStore;
+    private  String ACCESS_TOKEN;
+    private  String TOKEN_TYPE;
+
+    private OkHttpClient authClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
         // Initializing Toolbar and setting it as the actionbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //Init layout
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id
+                .coordinatorLayout);
 
 
         //Initializing NavigationView
@@ -50,19 +80,19 @@ public class MainActivity extends AppCompatActivity {
 
 
                 //Checking if the item is in checked state or not, if not make it in checked state
-                if(menuItem.isChecked()) menuItem.setChecked(false);
+                if (menuItem.isChecked()) menuItem.setChecked(false);
                 else menuItem.setChecked(true);
 
                 //Closing drawer on item click
                 drawerLayout.closeDrawers();
 
                 //Check to see which item was being clicked and perform appropriate action
-                switch (menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
 
 
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.inbox:
-                        Toast.makeText(getApplicationContext(),"Inbox Selected",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Inbox Selected", Toast.LENGTH_SHORT).show();
 //                        ContentFragment fragment = new ContentFragment();
 //                        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 //                        fragmentTransaction.replace(R.id.frame, fragment);
@@ -72,31 +102,36 @@ public class MainActivity extends AppCompatActivity {
                     // For rest of the options we just show a toast on click
 
                     case R.id.starred:
-                        Toast.makeText(getApplicationContext(),"Stared Selected",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Stared Selected", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.sent_mail:
-                        Toast.makeText(getApplicationContext(),"Send Selected",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Send Selected", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.drafts:
-                        Toast.makeText(getApplicationContext(),"Drafts Selected",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Drafts Selected", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.allmail:
-                        Toast.makeText(getApplicationContext(),"All Mail Selected",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "All Mail Selected", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.trash:
-                        Toast.makeText(getApplicationContext(),"Trash Selected",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Trash Selected", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.spam:
-                        Toast.makeText(getApplicationContext(),"Spam Selected",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Spam Selected", Toast.LENGTH_SHORT).show();
                         return true;
                     default:
-                        Toast.makeText(getApplicationContext(),"Somethings Wrong",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
                         return true;
 
                 }
             }
         });
 
+        //Init textView
+        View header = LayoutInflater.from(this).inflate(R.layout.header,null,false);
+        usernameTV = (TextView) header.findViewById(R.id.usernameTeV);
+        emailTV = (TextView) header.findViewById(R.id.emailTeV);
+        navigationView.addHeaderView(header);
 
 
         // Initializing Drawer Layout and ActionBarToggle
@@ -135,29 +170,43 @@ public class MainActivity extends AppCompatActivity {
 
         //Init LocalStore, we need to pass Context
         userLocalStore = new UserLocalStore(this);
+
+
+        System.out.println(">>>>>>>>>ON CREATE");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         if (authenticate()) {
-            //TODO Start showing posts
+            //Set up auth header for requests
+            authClient = new AuthInterceptor(userLocalStore
+                    .getAccessToken())
+                    .getOkHttpClient();
+
+            loadUserInfo();
+
         } else {
             Intent intent = new Intent(MainActivity.this,LoginActivity.class);
             startActivityForResult(intent, 1);
             //startActivity(new Intent(MainActivity.this,LoginActivity.class));
         }
+        System.out.println(">>>>>>>>>> ON START");
     }
+
+
 
     private boolean authenticate() {
         return userLocalStore.getUserLoggedIn();
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
 
+                System.out.println(">>>>>>>>>>>>ON RESULT");
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result
@@ -167,5 +216,49 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadUserInfo() {
 
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .create();
+
+
+        // Set the custom client when building adapter
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(OkonService.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(authClient)
+                .build();
+
+        OkonService okonService = retrofit.create(OkonService.class);
+        Call<User> call =  okonService.getMe();
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Response<User> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    int statusCode = response.code();
+                    User user = response.body();
+                    System.out.println(user.getFullName() + "  " + user.getEmail());
+
+                    usernameTV.setText(user.getUsername());
+                    emailTV.setText(user.getEmail());
+                    System.out.println(statusCode);
+
+                } else {
+                    Snackbar snackbar = Snackbar
+                            .make(coordinatorLayout, "Blad pobierania danych uzytkownika!", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    System.out.println("HIUSTON MAMAY PROBLEM z uzytkownikiem");
+                    //TODO catch code error
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Snackbar snackbar = Snackbar
+                        .make(coordinatorLayout, "Problem z nawiazaniem polaczenia.", Snackbar.LENGTH_LONG);
+                snackbar.show();
+                t.printStackTrace();
+            }
+        });
     }
 }
