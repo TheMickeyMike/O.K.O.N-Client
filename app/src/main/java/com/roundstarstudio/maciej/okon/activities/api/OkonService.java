@@ -24,12 +24,12 @@ public interface OkonService {
     /*Statuses*/
 
     @GET("statuses/statuses")
-    Call<List<Status>> getAllStatuses(@Path("id") int groupId, @Query("sort") String sort);
+    Call<List<Status>> getAllStatuses();
 
     @GET("statuses/feed")
-    Call<List<Status>> getFeed(@Query("count") int count,
-                               @Query("min_id") int min_id,
-                               @Query("max_id") int max_id);
+    Call<List<Status>> getFeed(@Query("count") Integer count,
+                               @Query("min_id") Integer min_id,
+                               @Query("max_id") Integer max_id);
 
     @GET("statuses/{userid}")
     Call<List<Status>> getUserFeed(@Path("userid") String user_id);

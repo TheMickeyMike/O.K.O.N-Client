@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.roundstarstudio.maciej.okon">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -23,11 +23,14 @@
         <activity
             android:name=".activities.ui.activities.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activities.ui.activities.RegisterActivity"
             android:label="@string/title_activity_register"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activities.ui.activities.RecyclerActivity"
+            android:label="@string/title_activity_recycler"
             android:theme="@style/AppTheme"></activity>
     </application>
 
