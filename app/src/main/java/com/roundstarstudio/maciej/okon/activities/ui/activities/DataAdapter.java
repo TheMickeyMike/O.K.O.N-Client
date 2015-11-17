@@ -35,6 +35,7 @@ public class DataAdapter extends RecyclerView.Adapter{
 
 
     public DataAdapter(List<Status> students, RecyclerView recyclerView) {
+
         studentList = students;
 
         if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
@@ -131,6 +132,7 @@ public class DataAdapter extends RecyclerView.Adapter{
 
         public StudentViewHolder(View v) {
             super(v);
+
             tvName = (TextView) v.findViewById(R.id.tvName);
 
             tvEmailId = (TextView) v.findViewById(R.id.tvEmailId);

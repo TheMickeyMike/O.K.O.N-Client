@@ -54,8 +54,7 @@ public class RecyclerActivity extends AppCompatActivity {
         studentList = new ArrayList<Status>();
         handler = new Handler();
 
-        initData();
-//        loadData();
+        loadData(null);
 
 
         // use this setting to improve performance if you know that changes
@@ -132,58 +131,6 @@ public class RecyclerActivity extends AppCompatActivity {
         }
     }
 
-    private void initData() {
-
-        Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
-                .create();
-
-
-        // Set the custom client when building adapter
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(OkonService.ENDPOINT)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-//                .client(authClient)
-                .build();
-
-        OkonService okonService = retrofit.create(OkonService.class);
-        Call <List<Status>> call =  okonService.getAllStatuses();
-
-
-        call.enqueue(new Callback<List<Status>>() {
-            @Override
-            public void onResponse(Response<List<Status>> response, Retrofit retrofit) {
-                if (response.isSuccess()) {
-                    int statusCode = response.code();
-                    List<Status> statuses = response.body();
-
-                    for (Status _status : statuses) {
-                        studentList.add(_status);
-                        System.out.println(_status.getContent()+ "  " + _status.getUser().getFullName());
-                    }
-
-
-//                    System.out.println(statuses.get(0).getContent() + "  " + statuses.get(0).getUser().getFullName());
-
-                    System.out.println(statusCode);
-
-
-                } else {
-                    System.out.println("HIUSTON MAMAY PROBLEM z uzytkownikiem");
-                    //TODO catch code error
-                }
-                checkInitData();
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                System.out.println("Problem z polaczeniem");
-                t.printStackTrace();
-            }
-        });
-
-    }
-
 
     // load initial data
     private void loadData(Integer id) {
@@ -202,7 +149,7 @@ public class RecyclerActivity extends AppCompatActivity {
                 .build();
 
         OkonService okonService = retrofit.create(OkonService.class);
-        Call<List<Status>> call =  okonService.getFeed(20,id,null);
+        Call<List<Status>> call =  okonService.getFeed(2,null,id);
 
         call.enqueue(new Callback<List<Status>>() {
             @Override
