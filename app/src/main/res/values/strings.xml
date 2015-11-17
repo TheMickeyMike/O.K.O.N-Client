@@ -29,4 +29,5 @@
     <string name="err_msg_password">Enter the password</string>
     <string name="title_activity_recycler_view">RecyclerView</string>
     <string name="title_activity_recycler">Recycler</string>
+    <string name="title_activity_rec">recActivity</string>
 </resources>

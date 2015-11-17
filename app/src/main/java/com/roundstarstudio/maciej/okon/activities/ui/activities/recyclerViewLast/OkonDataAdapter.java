@@ -1,10 +1,12 @@
-package com.roundstarstudio.maciej.okon.activities.ui.activities;
+package com.roundstarstudio.maciej.okon.activities.ui.activities.recyclerViewLast;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,14 +18,14 @@ import com.roundstarstudio.maciej.okon.activities.ui.adapters.OnLoadMoreListener
 import java.util.List;
 
 /**
- * Created by Maciej on 16.11.15.
+ * Created by Maciej on 17.11.15.
  */
-public class DataAdapter extends RecyclerView.Adapter{
+public class OkonDataAdapter extends RecyclerView.Adapter {
 
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
 
-    private List<Status> studentList;
+    private static List<Status> imagesList;
 
     // The minimum amount of items to have below your current scroll position
     // before loading more.
@@ -32,11 +34,8 @@ public class DataAdapter extends RecyclerView.Adapter{
     private boolean loading;
     private OnLoadMoreListener onLoadMoreListener;
 
-
-
-    public DataAdapter(List<Status> students, RecyclerView recyclerView) {
-
-        studentList = students;
+    public OkonDataAdapter(List<Status> imagesList1, RecyclerView recyclerView) {
+        imagesList = imagesList1;
 
         if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
 
@@ -68,9 +67,10 @@ public class DataAdapter extends RecyclerView.Adapter{
         }
     }
 
+
     @Override
     public int getItemViewType(int position) {
-        return studentList.get(position) != null ? VIEW_ITEM : VIEW_PROG;
+        return imagesList.get(position) != null ? VIEW_ITEM : VIEW_PROG;
     }
 
     @Override
@@ -81,10 +81,10 @@ public class DataAdapter extends RecyclerView.Adapter{
             View v = LayoutInflater.from(parent.getContext()).inflate(
                     R.layout.cardview_row, parent, false);
 
-            vh = new StudentViewHolder(v);
+            vh = new WallPaperViewHolder(v);
         } else {
             View v = LayoutInflater.from(parent.getContext()).inflate(
-                    R.layout.progressbar_item, parent, false);
+                    R.layout.progress_item, parent, false);
 
             vh = new ProgressViewHolder(v);
         }
@@ -92,17 +92,16 @@ public class DataAdapter extends RecyclerView.Adapter{
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof StudentViewHolder) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        if (holder instanceof WallPaperViewHolder) {
 
-            Status singleStudent= (Status) studentList.get(position);
+            final Status singleWallPaper = (Status) imagesList.get(position);
 
-            ((StudentViewHolder) holder).tvName.setText(singleStudent.getContent());
+            ((WallPaperViewHolder) holder).tvName.setText(singleWallPaper.getContent()+"");
 
-            ((StudentViewHolder) holder).tvEmailId.setText(singleStudent.getUser().getFullName());
+            ((WallPaperViewHolder) holder).tvEmailId.setText(singleWallPaper.getUser().getFullName()+"");
 
-            ((StudentViewHolder) holder).student= singleStudent;
-
+            ((WallPaperViewHolder) holder).postion=position;
         } else {
             ((ProgressViewHolder) holder).progressBar.setIndeterminate(true);
         }
@@ -114,7 +113,7 @@ public class DataAdapter extends RecyclerView.Adapter{
 
     @Override
     public int getItemCount() {
-        return studentList.size();
+        return imagesList.size();
     }
 
     public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
@@ -123,32 +122,53 @@ public class DataAdapter extends RecyclerView.Adapter{
 
 
     //
-    public static class StudentViewHolder extends RecyclerView.ViewHolder {
+    public static class WallPaperViewHolder extends RecyclerView.ViewHolder {
+
+//
+//        public ImageView thumbIcon;
+//
+//        public TextView tvDownloads;
+//
+//        public TextView tvFav;
+
         public TextView tvName;
 
         public TextView tvEmailId;
 
         public Status student;
 
-        public StudentViewHolder(View v) {
+        public int postion;
+
+
+        public WallPaperViewHolder(View v) {
             super(v);
+
+//
+//            thumbIcon = (ImageView) v.findViewById(R.id.thumbIcon);
+//            tvDownloads = (TextView) v.findViewById(R.id.tvDownloads);
+//            tvFav = (TextView) v.findViewById(R.id.tvFav);
+
 
             tvName = (TextView) v.findViewById(R.id.tvName);
 
             tvEmailId = (TextView) v.findViewById(R.id.tvEmailId);
 
             v.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
+
                     Toast.makeText(v.getContext(),
                             "OnClick :" + student.getContent() + " \n " + student.getUser().getFullName(),
                             Toast.LENGTH_SHORT).show();
 
                 }
             });
+
+
+
         }
     }
+
 
     public static class ProgressViewHolder extends RecyclerView.ViewHolder {
         public ProgressBar progressBar;
@@ -158,4 +178,5 @@ public class DataAdapter extends RecyclerView.Adapter{
             progressBar = (ProgressBar) v.findViewById(R.id.progressBar1);
         }
     }
+
 }

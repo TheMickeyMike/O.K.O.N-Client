@@ -50,7 +50,7 @@ public class RecyclerActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         tvEmptyView = (TextView) findViewById(R.id.empty_view);
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_vieww);
         studentList = new ArrayList<Status>();
         handler = new Handler();
 
@@ -92,7 +92,8 @@ public class RecyclerActivity extends AppCompatActivity {
                 studentList.add(null);
                 mAdapter.notifyItemInserted(studentList.size() - 1);
 
-                handler.postDelayed(new Runnable() {
+
+                handler.post(new Runnable() {
                     @Override
                     public void run() {
                         //   remove progress item
@@ -103,15 +104,31 @@ public class RecyclerActivity extends AppCompatActivity {
                         int end = start + 20;
 
                         loadData(start);
-//
-//                        for (int i = start + 1; i <= end; i++) {
-//                            studentList.add(new Status("Student " + i,  i ));
-//                            mAdapter.notifyItemInserted(studentList.size());
-//                        }
-//                        mAdapter.setLoaded();
-                        //or you can add all at once but do not forget to call mAdapter.notifyDataSetChanged();
+
                     }
-                }, 2000);
+                });
+
+
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        //   remove progress item
+//                        studentList.remove(studentList.size() - 1);
+//                        mAdapter.notifyItemRemoved(studentList.size());
+//                        //add items one by one
+//                        int start = studentList.get(studentList.size() - 1).getId();
+//                        int end = start + 20;
+//
+//                        loadData(start);
+////
+////                        for (int i = start + 1; i <= end; i++) {
+////                            studentList.add(new Status("Student " + i,  i ));
+////                            mAdapter.notifyItemInserted(studentList.size());
+////                        }
+////                        mAdapter.setLoaded();
+//                        //or you can add all at once but do not forget to call mAdapter.notifyDataSetChanged();
+//                    }
+//                }, 2000);
 
             }
         });
@@ -149,7 +166,7 @@ public class RecyclerActivity extends AppCompatActivity {
                 .build();
 
         OkonService okonService = retrofit.create(OkonService.class);
-        Call<List<Status>> call =  okonService.getFeed(2,null,id);
+        Call<List<Status>> call =  okonService.getFeed(null,null,null);
 
         call.enqueue(new Callback<List<Status>>() {
             @Override
@@ -165,6 +182,14 @@ public class RecyclerActivity extends AppCompatActivity {
                         mAdapter.notifyItemInserted(studentList.size());
                         mAdapter.setLoaded();
                     }
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.notifyItemInserted(studentList.size());
+                        }
+                    });
+
 
 
                     System.out.println(statusCode);

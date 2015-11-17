@@ -26,6 +26,8 @@ import com.roundstarstudio.maciej.okon.activities.api.AuthInterceptor;
 import com.roundstarstudio.maciej.okon.activities.api.OkonService;
 import com.roundstarstudio.maciej.okon.activities.api.model.AccessToken;
 import com.roundstarstudio.maciej.okon.activities.api.model.User;
+import com.roundstarstudio.maciej.okon.activities.ui.activities.recyclerViewLast.recActivity;
+import com.roundstarstudio.maciej.okon.activities.ui.activities.recyclerViewPt.CardViewActivity;
 import com.squareup.okhttp.OkHttpClient;
 
 
