@@ -10,10 +10,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.roundstarstudio.maciej.okon.R;
+import com.roundstarstudio.maciej.okon.activities.api.model.Connections;
 import com.roundstarstudio.maciej.okon.activities.api.model.Status;
 import com.roundstarstudio.maciej.okon.activities.ui.adapters.OnLoadMoreListener;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeUtils;
+import org.joda.time.DateTimeZone;
+import org.joda.time.Days;
+import org.joda.time.Hours;
+import org.joda.time.Minutes;
+import org.joda.time.Seconds;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.logging.SimpleFormatter;
 
 /**
  * Created by Maciej on 16.11.15.
@@ -79,7 +93,7 @@ public class DataAdapter extends RecyclerView.Adapter{
         RecyclerView.ViewHolder vh;
         if (viewType == VIEW_ITEM) {
             View v = LayoutInflater.from(parent.getContext()).inflate(
-                    R.layout.cardview_row, parent, false);
+                    R.layout.statuscardview, parent, false);
 
             vh = new StudentViewHolder(v);
         } else {
@@ -97,9 +111,13 @@ public class DataAdapter extends RecyclerView.Adapter{
 
             Status singleStudent= (Status) studentList.get(position);
 
-            ((StudentViewHolder) holder).tvName.setText(singleStudent.getContent());
+            ((StudentViewHolder) holder).tvContent.setText(singleStudent.getContent());
 
-            ((StudentViewHolder) holder).tvEmailId.setText(singleStudent.getUser().getFullName());
+            ((StudentViewHolder) holder).tvFullName.setText(singleStudent.getUser().getFullName());
+
+            ((StudentViewHolder) holder).tvUserName.setText(singleStudent.getUser().getUsername());
+
+            ((StudentViewHolder) holder).tvDate.setText(ConvertDate(singleStudent.getCreatedAt()));
 
             ((StudentViewHolder) holder).student= singleStudent;
 
@@ -124,18 +142,26 @@ public class DataAdapter extends RecyclerView.Adapter{
 
     //
     public static class StudentViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvName;
+        public TextView tvContent;
 
-        public TextView tvEmailId;
+        public TextView tvFullName;
+
+        public TextView tvUserName;
+
+        public TextView tvDate;
 
         public Status student;
 
         public StudentViewHolder(View v) {
             super(v);
 
-            tvName = (TextView) v.findViewById(R.id.tvName);
+            tvContent = (TextView) v.findViewById(R.id.content);
 
-            tvEmailId = (TextView) v.findViewById(R.id.tvEmailId);
+            tvFullName = (TextView) v.findViewById(R.id.full_name);
+
+            tvUserName = (TextView) v.findViewById(R.id.user_name);
+
+            tvDate = (TextView) v.findViewById(R.id.date);
 
             v.setOnClickListener(new View.OnClickListener() {
 
@@ -157,5 +183,47 @@ public class DataAdapter extends RecyclerView.Adapter{
             super(v);
             progressBar = (ProgressBar) v.findViewById(R.id.progressBar1);
         }
+    }
+
+
+    private String ConvertDate(String raw) {
+
+
+        DateTimeZone utc = DateTimeZone.UTC;
+
+        Calendar cal = Calendar.getInstance();
+
+        DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ");
+       // DateTime dt1 = format.parseDateTime(raw).withZone(utc);
+        DateTime dt1 = new DateTime(raw);
+        DateTime dt2 = new DateTime(cal);
+
+        int daysBetween = Days.daysBetween(dt1,dt2).getDays();
+        int hoursBetween = Hours.hoursBetween(dt1, dt2).getHours() % 24;
+        int minutesBetween = Minutes.minutesBetween(dt1, dt2).getMinutes() % 60;
+        int secondsBetween = Seconds.secondsBetween(dt1, dt2).getSeconds() % 60;
+//        System.out.println(daysBetween + " " + hoursBetween + " " + minutesBetween + " " + secondsBetween);
+
+        if (daysBetween > 0) {
+            if (daysBetween == 1)
+                return daysBetween + " day ago";
+            else
+                return daysBetween + " days ago";
+        } else if (hoursBetween > 0) {
+            if (hoursBetween == 1)
+                return  hoursBetween + " hour ago";
+            else
+                return hoursBetween + " hours ago";
+        } else if (minutesBetween > 0) {
+            if (minutesBetween == 1)
+                return minutesBetween + " minute ago";
+            else
+                return minutesBetween + " minutes ago";
+        } else if (secondsBetween > 0) {
+            if (secondsBetween == 1)
+                return secondsBetween + " second ago";
+            else
+                return secondsBetween + " seconds ago";
+        } else return null;
     }
 }

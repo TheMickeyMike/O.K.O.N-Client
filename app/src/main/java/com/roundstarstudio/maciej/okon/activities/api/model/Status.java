@@ -6,8 +6,8 @@ package com.roundstarstudio.maciej.okon.activities.api.model;
 public class Status {
     public int id;
     public String content;
-    public String createdAt;
-    public String updatedAt;
+    public String created_at;
+    public String updated_at;
     public User user;
 
     public Status(String content, int id) {
@@ -20,11 +20,11 @@ public class Status {
     }
 
     public String getCreatedAt() {
-        return createdAt;
+        return created_at;
     }
 
     public String getUpdatedAt() {
-        return updatedAt;
+        return updated_at;
     }
 
     public String getContent() {
