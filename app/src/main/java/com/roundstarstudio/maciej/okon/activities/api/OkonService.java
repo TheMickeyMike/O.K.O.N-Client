@@ -60,12 +60,15 @@ public interface OkonService {
                                       @Query("max_timestamp") String max_timestamp);    //TODO Date Format ("yyyy-MM-dd'T'HH:mm:ssZ")
 
     @POST("users/sign_up")
-    Call<User> createUser(@Query("first_name") String first_name,
+    Call<NewUser> createUser(@Query("first_name") String first_name,
                           @Query("last_name") String last_name,
                           @Query("profile_name") String profile_name,
                           @Query("email") String email,
                           @Query("password") String password,
                           @Query("password_confirmation") String password_confirmation);
+
+    @POST("users/sign_up")
+    Call<NewUser> signUp(@Body NewUser user);
 
 
 

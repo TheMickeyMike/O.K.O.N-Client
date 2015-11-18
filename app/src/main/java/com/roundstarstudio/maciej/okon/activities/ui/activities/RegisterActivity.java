@@ -7,7 +7,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.roundstarstudio.maciej.okon.R;
+import com.roundstarstudio.maciej.okon.activities.api.OkonService;
+import com.roundstarstudio.maciej.okon.activities.api.model.NewUser;
+import com.roundstarstudio.maciej.okon.activities.api.model.Status;
+import com.roundstarstudio.maciej.okon.activities.api.model.User;
+
+import java.util.List;
+
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -45,8 +59,52 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 String email = emailText.getText().toString();
                 String password = passwordText.getText().toString();
 
+                NewUser user = new NewUser(firstName,secondName,userName,email,password);
+                signUp(user);
 
                 break;
         }
+    }
+
+    private void signUp(NewUser user) {
+
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(OkonService.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        OkonService apiService =
+                retrofit.create(OkonService.class);
+
+        Call<NewUser> call = apiService.signUp(user);
+
+        call.enqueue(new Callback<NewUser>() {
+            @Override
+            public void onResponse(Response<NewUser> response,
+                                   Retrofit retrofit) {
+
+                if (response.isSuccess()) {
+                    int statusCode = response.code();
+                    System.out.println(statusCode);
+
+                } else {
+                    System.out.println("HIUSTON MAMAY PROBLEM z uzytkownikiem");
+                    //TODO catch code error
+                }
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                System.out.println("Problem z polaczeniem");
+                t.printStackTrace();
+            }
+
+
+        });
     }
 }
