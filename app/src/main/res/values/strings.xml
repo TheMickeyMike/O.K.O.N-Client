@@ -30,4 +30,11 @@
     <string name="title_activity_recycler_view">RecyclerView</string>
     <string name="title_activity_recycler">Recycler</string>
     <string name="title_activity_rec">recActivity</string>
+    <string name="title_activity_user_profile">UserProfile</string>
+
+
+
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo</string>
 </resources>

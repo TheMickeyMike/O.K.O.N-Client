@@ -1,5 +1,7 @@
 package com.roundstarstudio.maciej.okon.activities.ui.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -185,6 +187,11 @@ public class DataAdapter extends RecyclerView.Adapter{
                             "OnClick :" + student.getContent() + " \n " + student.getUser().getFullName(),
                             Toast.LENGTH_SHORT).show();
 
+                    Context context = v.getContext();
+
+                    Intent intent = new Intent(context, UserProfile.class);
+                    //TODO Put extra ID
+                    context.startActivity(intent);
                 }
             });
         }
