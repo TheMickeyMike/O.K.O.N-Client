@@ -19,7 +19,7 @@ import retrofit.http.Query;
  */
 public interface OkonService {
 
-   public static final String ENDPOINT = "http://192.168.1.105:3000/api/v1/";
+   public static final String ENDPOINT = "http://coputer.science:3000/api/v1/";
 
     /*Statuses*/
 
@@ -35,7 +35,7 @@ public interface OkonService {
     Call<List<Status>> getUserFeed(@Path("userid") String user_id);
 
     @POST("statuses/new")
-    Call<Status> createUser(@Body User user);
+    Call<NewStatus> createUser(@Body NewStatus status);
 
     @PUT("statuses/{id}")
     Call<Status> updateStatus(@Path("id") String status_id);

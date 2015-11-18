@@ -10,9 +10,8 @@ public class Status {
     public String updated_at;
     public User user;
 
-    public Status(String content, int id) {
+    public Status(String content) {
         this.content = content;
-        this.id = id;
     }
 
     public User getUser() {

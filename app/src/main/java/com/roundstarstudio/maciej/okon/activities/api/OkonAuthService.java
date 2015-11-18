@@ -11,7 +11,7 @@ import retrofit.http.POST;
 
 public interface OkonAuthService {
 
-    public static final String ENDPOINT = "http://192.168.1.105:3000";
+    public static final String ENDPOINT = "http://coputer.science:3000";
 
 
     //TODO Revokes the given token, requires authentication (logout?)
