@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -46,6 +47,7 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
+
 
     //Defining Variables
     private Toolbar toolbar;
@@ -173,11 +175,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Init textView
-        View header = LayoutInflater.from(this).inflate(R.layout.header,null,false);
+        //Init header in navigation View
+        View header = navigationView.inflateHeaderView(R.layout.header);
+
+        //Init username, email, avatar in header View
         usernameTV = (TextView) header.findViewById(R.id.usernameTeV);
         emailTV = (TextView) header.findViewById(R.id.emailTeV);
-        navigationView.addHeaderView(header);
+
+        //Init textView
+//        View header = LayoutInflater.from(this).inflate(R.layout.header,null,false);
+//        usernameTV = (TextView) header.findViewById(R.id.usernameTeV);
+//        emailTV = (TextView) header.findViewById(R.id.emailTeV);
+//        navigationView.addHeaderView(header);
 
 
         // Initializing Drawer Layout and ActionBarToggle
@@ -216,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
         //Init LocalStore, we need to pass Context
         userLocalStore = new UserLocalStore(this);
 
@@ -236,16 +246,15 @@ public class MainActivity extends AppCompatActivity {
                         mAdapter.notifyItemRemoved(studentList.size());
                         //add items one by one
                         int start = studentList.get(studentList.size() - 1).getId();
-                        int end = start + 20;
+//                        int end = start + 20;
 
                         loadData(start);
+
 
                     }
                 });
             }
         });
-
-
 
 
         System.out.println(">>>>>>>>>ON CREATE");
@@ -324,6 +333,7 @@ public class MainActivity extends AppCompatActivity {
                         mAdapter.setLoaded();
                     }
 
+
                     System.out.println(statusCode);
 
                 } else {
@@ -332,13 +342,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
+
             @Override
             public void onFailure(Throwable t) {
                 System.out.println("Problem z polaczeniem");
                 t.printStackTrace();
             }
-        });
 
+
+        });
 
     }
 

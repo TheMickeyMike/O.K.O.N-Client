@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.roundstarstudio.maciej.okon.R;
 import com.roundstarstudio.maciej.okon.activities.api.model.Connections;
 import com.roundstarstudio.maciej.okon.activities.api.model.Status;
@@ -28,6 +29,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.logging.SimpleFormatter;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Maciej on 16.11.15.
@@ -121,6 +124,13 @@ public class DataAdapter extends RecyclerView.Adapter{
 
             ((StudentViewHolder) holder).student= singleStudent;
 
+            Glide.with(((StudentViewHolder) holder).avatar.getContext())
+                    .load(singleStudent.getUser().getGravatar_url())
+                    .centerCrop()
+                    .crossFade()
+                    .into(((StudentViewHolder) holder).avatar);
+
+
         } else {
             ((ProgressViewHolder) holder).progressBar.setIndeterminate(true);
         }
@@ -152,6 +162,8 @@ public class DataAdapter extends RecyclerView.Adapter{
 
         public Status student;
 
+        public CircleImageView avatar;
+
         public StudentViewHolder(View v) {
             super(v);
 
@@ -162,6 +174,8 @@ public class DataAdapter extends RecyclerView.Adapter{
             tvUserName = (TextView) v.findViewById(R.id.user_name);
 
             tvDate = (TextView) v.findViewById(R.id.date);
+
+            avatar = (CircleImageView) v.findViewById(R.id.profile_image);
 
             v.setOnClickListener(new View.OnClickListener() {
 
