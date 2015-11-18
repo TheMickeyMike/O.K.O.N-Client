@@ -166,7 +166,7 @@ public class RecyclerActivity extends AppCompatActivity {
                 .build();
 
         OkonService okonService = retrofit.create(OkonService.class);
-        Call<List<Status>> call =  okonService.getFeed(null,null,null);
+        Call<List<Status>> call =  okonService.getFeed(2,null,id);  //TODO Zmienic limit z 2 !!!
 
         call.enqueue(new Callback<List<Status>>() {
             @Override
@@ -182,15 +182,6 @@ public class RecyclerActivity extends AppCompatActivity {
                         mAdapter.notifyItemInserted(studentList.size());
                         mAdapter.setLoaded();
                     }
-
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAdapter.notifyItemInserted(studentList.size());
-                        }
-                    });
-
-
 
                     System.out.println(statusCode);
 
