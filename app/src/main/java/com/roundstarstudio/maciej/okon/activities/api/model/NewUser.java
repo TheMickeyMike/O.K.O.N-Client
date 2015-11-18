@@ -34,4 +34,11 @@ public class NewUser {
         this.password_confirmation = password;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
 }

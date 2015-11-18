@@ -1,5 +1,7 @@
 package com.roundstarstudio.maciej.okon.activities.ui.activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +29,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private Button registerButton;
     private EditText firstNameText, secondNameText, userNameText, emailText, passwordText;
+
+    private  Intent returnIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +70,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private void signUp(NewUser user) {
+    private void signUp(final NewUser user) {
+
 
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
@@ -90,6 +95,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 if (response.isSuccess()) {
                     int statusCode = response.code();
                     System.out.println(statusCode);
+                    returnIntent = new Intent();
+                    returnIntent.putExtra(LoginActivity.REG_EMAIL,user.getEmail());
+                    returnIntent.putExtra(LoginActivity.REG_PASS,user.getPassword());
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish(); // Finish Activity
+
 
                 } else {
                     System.out.println("HIUSTON MAMAY PROBLEM z uzytkownikiem");

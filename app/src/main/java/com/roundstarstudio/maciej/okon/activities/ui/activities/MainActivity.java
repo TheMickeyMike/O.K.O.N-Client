@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.roundstarstudio.maciej.okon.R;
@@ -40,6 +41,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -48,6 +50,9 @@ import retrofit.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    //Avatar in header View
+    CircleImageView avatar;
 
     //Defining Variables
     private Toolbar toolbar;
@@ -106,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
         // set the adapter object to the Recyclerview
         mRecyclerView.setAdapter(mAdapter);
+
 
 
 
@@ -179,6 +185,8 @@ public class MainActivity extends AppCompatActivity {
         View header = navigationView.inflateHeaderView(R.layout.header);
 
         //Init username, email, avatar in header View
+        //Init avatar
+        avatar = (CircleImageView) header.findViewById(R.id.profile_image);
         usernameTV = (TextView) header.findViewById(R.id.usernameTeV);
         emailTV = (TextView) header.findViewById(R.id.emailTeV);
 
@@ -316,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         OkonService okonService = retrofit.create(OkonService.class);
-        Call<List<Status>> call =  okonService.getFeed(2,null,id);  //TODO Zmienic limit z 2 !!!
+        Call<List<Status>> call =  okonService.getFeed(2, null, id);  //TODO Zmienic limit z 2 !!!
 
         call.enqueue(new Callback<List<Status>>() {
             @Override
@@ -369,7 +377,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         OkonService okonService = retrofit.create(OkonService.class);
-        Call<User> call =  okonService.getMe();
+        Call<User> call = okonService.getMe();
 
         call.enqueue(new Callback<User>() {
             @Override
@@ -379,8 +387,15 @@ public class MainActivity extends AppCompatActivity {
                     User user = response.body();
                     System.out.println(user.getFullName() + "  " + user.getEmail());
 
-                    usernameTV.setText(user.getUsername());
+                    usernameTV.setText(user.getFullName());
                     emailTV.setText(user.getEmail());
+                    //Loading avatar in header
+                    Glide.with(avatar.getContext())
+                            .load(user.getGravatar_url())
+                            .centerCrop()
+                            .crossFade()
+                            .into(avatar);
+
                     System.out.println(statusCode);
 
                 } else {

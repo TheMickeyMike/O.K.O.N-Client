@@ -42,6 +42,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private UserLocalStore userLocalStore;
 
+    public static final String REG_EMAIL = "com.roundstarstudio.EMAIL";
+    public static final String REG_PASS = "com.roundstarstudio.PASS";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,10 +97,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
                 break;
             case R.id.registerLinkTextView:
-                startActivity(new Intent(this, RegisterActivity.class));
+                Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
+                startActivityForResult(intent, 1);
+//                startActivity(new Intent(this, RegisterActivity.class));
                 break;
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            System.out.println(">>>>>>>>>> RETURN");
+            if(resultCode == Activity.RESULT_OK && data != null){
+                getAccessToken(data.getStringExtra(REG_EMAIL), data.getStringExtra(REG_PASS));
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
     }
 
     //Get AccessToken form OAuth
