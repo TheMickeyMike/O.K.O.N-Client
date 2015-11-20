@@ -50,6 +50,7 @@ import retrofit.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     //Avatar in header View
     CircleImageView avatar;
@@ -90,12 +91,15 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+
         //Init Recycler view
         tvEmptyView = (TextView) findViewById(R.id.empty_view);
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_vieww);
+        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         studentList = new ArrayList<Status>();
         handler = new Handler();
         loadData(null);
+
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -241,26 +245,37 @@ public class MainActivity extends AppCompatActivity {
         mAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                //add null , so the adapter will check view_type and show progress bar at bottom
-                studentList.add(null);
-                mAdapter.notifyItemInserted(studentList.size() - 1);
+
+                if (mSwipeRefreshLayout != null && !mSwipeRefreshLayout.isRefreshing()) {
+                    //add null , so the adapter will check view_type and show progress bar at bottom
+                    studentList.add(null);
+                    mAdapter.notifyItemInserted(studentList.size() - 1);
 
 
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        //   remove progress item
-                        studentList.remove(studentList.size() - 1);
-                        mAdapter.notifyItemRemoved(studentList.size());
-                        //add items one by one
-                        int start = studentList.get(studentList.size() - 1).getId();
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            //   remove progress item
+                            studentList.remove(studentList.size() - 1);
+                            mAdapter.notifyItemRemoved(studentList.size());
+                            //add items one by one
+                            int start = studentList.get(studentList.size() - 1).getId();
 //                        int end = start + 20;
 
-                        loadData(start);
+                            loadData(start);
 
 
-                    }
-                });
+                        }
+                    });
+                }
+            }
+        });
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                loadData(null);
             }
         });
 
@@ -359,6 +374,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         });
+        mSwipeRefreshLayout.setRefreshing(false);
 
     }
 

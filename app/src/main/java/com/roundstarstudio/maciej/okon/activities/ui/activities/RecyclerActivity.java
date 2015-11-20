@@ -2,6 +2,7 @@ package com.roundstarstudio.maciej.okon.activities.ui.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +29,10 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 public class RecyclerActivity extends AppCompatActivity {
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+
     private RecyclerView mRecyclerView;
     private DataAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -49,6 +54,7 @@ public class RecyclerActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         tvEmptyView = (TextView) findViewById(R.id.empty_view);
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_vieww);
         studentList = new ArrayList<Status>();
@@ -71,6 +77,9 @@ public class RecyclerActivity extends AppCompatActivity {
 
         // set the adapter object to the Recyclerview
         mRecyclerView.setAdapter(mAdapter);
+
+
+
         //  mAdapter.notifyDataSetChanged();
 
 
@@ -88,25 +97,30 @@ public class RecyclerActivity extends AppCompatActivity {
         mAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                //add null , so the adapter will check view_type and show progress bar at bottom
-                studentList.add(null);
-                mAdapter.notifyItemInserted(studentList.size() - 1);
+
+                if (mSwipeRefreshLayout != null && !mSwipeRefreshLayout.isRefreshing()) {
+
+                    //add null , so the adapter will check view_type and show progress bar at bottom
+                    studentList.add(null);
+                    mAdapter.notifyItemInserted(studentList.size() - 1);
 
 
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        //   remove progress item
-                        studentList.remove(studentList.size() - 1);
-                        mAdapter.notifyItemRemoved(studentList.size());
-                        //add items one by one
-                        int start = studentList.get(studentList.size() - 1).getId();
-                        int end = start + 20;
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.out.println("Jestem w RUNNN");
+                            //   remove progress item
+                            studentList.remove(studentList.size() - 1);
+                            mAdapter.notifyItemRemoved(studentList.size());
+                            //add items one by one
+                            int start = studentList.get(studentList.size() - 1).getId();
+                            int end = start + 20;
 
-                        loadData(start);
+                            loadData(start);
 
-                    }
-                });
+                        }
+                    });
+                }
 
 
 //                handler.postDelayed(new Runnable() {
@@ -132,6 +146,20 @@ public class RecyclerActivity extends AppCompatActivity {
 
             }
         });
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshItems();
+                System.out.println("RRRRRUUUUUUUUNNNNN BIATCH");
+            }
+        });
+
+    }
+
+    void refreshItems() {
+        studentList.clear();
+        loadData(null);
     }
 
 
@@ -166,7 +194,7 @@ public class RecyclerActivity extends AppCompatActivity {
                 .build();
 
         OkonService okonService = retrofit.create(OkonService.class);
-        Call<List<Status>> call =  okonService.getFeed(2,null,id);  //TODO Zmienic limit z 2 !!!
+        Call<List<Status>> call =  okonService.getFeed(10,null,id);  //TODO Zmienic limit z 2 !!!
 
         call.enqueue(new Callback<List<Status>>() {
             @Override
@@ -184,6 +212,7 @@ public class RecyclerActivity extends AppCompatActivity {
                     }
 
                     System.out.println(statusCode);
+
 
                 } else {
                     System.out.println("HIUSTON MAMAY PROBLEM z uzytkownikiem");

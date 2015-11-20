@@ -19,7 +19,7 @@ import retrofit.http.Query;
  */
 public interface OkonService {
 
-   public static final String ENDPOINT = "http://coputer.science:3000/api/v1/";
+   public static final String ENDPOINT = "http://192.168.1.105:3000/api/v1/";
 
     /*Statuses*/
 
