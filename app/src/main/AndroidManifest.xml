@@ -29,10 +29,6 @@
             android:label="@string/title_activity_register"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activities.ui.activities.RecyclerActivity"
-            android:label="@string/title_activity_recycler"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".activities.ui.activities.recyclerViewPt.CardViewActivity"
             android:label="@string/title_activity_recycler"
             android:theme="@style/AppTheme" />

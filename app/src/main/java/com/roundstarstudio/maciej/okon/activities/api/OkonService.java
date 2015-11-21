@@ -50,6 +50,9 @@ public interface OkonService {
     @GET("users/me")
     Call<User> getMe();
 
+    @GET("users/id/{id}")
+    Call<User> getUser(@Path("id") int id);
+
     @GET("users/recent/{id}")
     Call<List<Status>> getPrivateFeed(@Path("id") int id,
                                       //@Query("id") int id,

@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.roundstarstudio.maciej.okon.BuildConfig;
@@ -29,6 +30,7 @@ import com.roundstarstudio.maciej.okon.activities.api.OkonAuthService;
 import com.roundstarstudio.maciej.okon.activities.api.OkonService;
 import com.roundstarstudio.maciej.okon.activities.api.model.AccessToken;
 import com.roundstarstudio.maciej.okon.activities.api.model.Status;
+import com.roundstarstudio.maciej.okon.activities.api.model.User;
 import com.roundstarstudio.maciej.okon.activities.ui.adapters.OnLoadMoreListener;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -72,11 +74,29 @@ public class UserProfile extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         user_id = getIntent().getExtras().getInt("USER_ID");
 
         //Init LocalStore, we need to pass Context
         userLocalStore = new UserLocalStore(this);
+
+        if (authenticate()) {
+            //Set up auth header for requests
+            authClient = new AuthInterceptor(userLocalStore
+                    .getAccessToken())
+                    .getOkHttpClient();
+
+            loadUserInfo();
+            getUserProfile(null);
+
+        } else {
+            finish(); //TODO  Aby na pewno?
+            //startActivity(new Intent(MainActivity.this,LoginActivity.class));
+        }
+
+
+
+
+
 
 
         //Init Recycler view
@@ -104,8 +124,8 @@ public class UserProfile extends AppCompatActivity {
 
         collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle("Title");
-        collapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color.transparent));
+
+//        collapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color.transparent));
 
 //        collapsingToolbar.setContentScrimColor(Color.BLUE);
 //        collapsingToolbar.setStatusBarScrimColor(Color.GREEN);
@@ -157,19 +177,6 @@ public class UserProfile extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (authenticate()) {
-            //Set up auth header for requests
-            authClient = new AuthInterceptor(userLocalStore
-                    .getAccessToken())
-                    .getOkHttpClient();
-
-
-            getUserProfile(null);
-
-        } else {
-            finish(); //TODO  Aby na pewno?
-            //startActivity(new Intent(MainActivity.this,LoginActivity.class));
-        }
         System.out.println(">>>>>>>>>> ON START");
     }
 
@@ -177,6 +184,20 @@ public class UserProfile extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         clearData();
+
+        if (authenticate()) {
+            //Set up auth header for requests
+            authClient = new AuthInterceptor(userLocalStore
+                    .getAccessToken())
+                    .getOkHttpClient();
+
+            loadUserInfo();
+            getUserProfile(null);
+
+        } else {
+            finish(); //TODO  Aby na pewno?
+            //startActivity(new Intent(MainActivity.this,LoginActivity.class));
+        }
         System.out.println("ON RESTARTTTTT");
     }
 
@@ -219,12 +240,14 @@ public class UserProfile extends AppCompatActivity {
                     int statusCode = response.code();
                     List<Status> status = response.body();
 
+
                     for (Status _status : status) {
                         studentList.add(_status);
                         System.out.println(_status.getContent() + "  " + _status.getUser().getFullName());
                         mAdapter.notifyItemInserted(studentList.size());
                         mAdapter.setLoaded();
                     }
+
 
                     System.out.println(statusCode);
                 } else {
@@ -241,6 +264,59 @@ public class UserProfile extends AppCompatActivity {
         });
     }
 
+
+
+    private void loadUserInfo() {
+
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .create();
+
+
+        // Set the custom client when building adapter
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(OkonService.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(authClient)
+                .build();
+
+        OkonService okonService = retrofit.create(OkonService.class);
+        Call<User> call = okonService.getUser(user_id);
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Response<User> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    int statusCode = response.code();
+                    User user = response.body();
+
+                    collapsingToolbar.setTitle(user.getFullName());
+
+                    //Loading avatar in header
+                    Glide.with(image.getContext())
+                            .load(user.getGravatar_url())
+                            .centerCrop()
+                            .crossFade()
+                            .into(image);
+
+
+                    System.out.println(statusCode);
+
+                } else if (response.code() == 401) {
+                    System.out.println("401 w loadUserInfo");
+
+                } else {
+                    System.out.println("HIUSTON MAMAY PROBLEM z uzytkownikiem");
+                    //TODO catch code error
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
 
 
 }

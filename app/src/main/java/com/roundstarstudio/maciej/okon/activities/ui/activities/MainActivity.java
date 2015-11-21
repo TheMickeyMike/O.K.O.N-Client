@@ -272,6 +272,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
+
         //Init LocalStore, we need to pass Context
         userLocalStore = new UserLocalStore(this);
 
@@ -403,7 +405,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         OkonService okonService = retrofit.create(OkonService.class);
-        Call<List<Status>> call = okonService.getFeed(10, null, id);  //TODO Zmienic limit z 2 !!!
+        Call<List<Status>> call = okonService.getFeed(2, null, id);  //TODO Zmienic limit z 2 !!!
 
         call.enqueue(new Callback<List<Status>>() {
             @Override
