@@ -190,6 +190,7 @@ public class DataAdapter extends RecyclerView.Adapter{
                     Context context = v.getContext();
 
                     Intent intent = new Intent(context, UserProfile.class);
+                    intent.putExtra("USER_ID", student.getUser().getId());
                     //TODO Put extra ID
                     context.startActivity(intent);
                 }

@@ -53,9 +53,9 @@ public interface OkonService {
     @GET("users/recent/{id}")
     Call<List<Status>> getPrivateFeed(@Path("id") int id,
                                       //@Query("id") int id,
-                                      @Query("count") int count,
-                                      @Query("min_id") int min_id,
-                                      @Query("max_id") int max_id,
+                                      @Query("count") Integer count,
+                                      @Query("min_id") Integer min_id,
+                                      @Query("max_id") Integer max_id,
                                       @Query("min_timestamp") String min_timestamp, //TODO Date Format ("yyyy-MM-dd'T'HH:mm:ssZ")
                                       @Query("max_timestamp") String max_timestamp);    //TODO Date Format ("yyyy-MM-dd'T'HH:mm:ssZ")
 

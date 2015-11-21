@@ -8,6 +8,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +54,13 @@ public class MainActivity extends AppCompatActivity {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+    //NewStatusCard
+    EditText newContentET;
+    CircleImageView avatarNC;
+    TextView nameNC;
+    TextView userNameNC;
+
+
     //Avatar in header View
     CircleImageView avatar;
 
@@ -64,8 +73,8 @@ public class MainActivity extends AppCompatActivity {
     private CoordinatorLayout coordinatorLayout;
 
     private UserLocalStore userLocalStore;
-    private  String ACCESS_TOKEN;
-    private  String TOKEN_TYPE;
+    private String ACCESS_TOKEN;
+    private String TOKEN_TYPE;
 
     private OkHttpClient authClient;
 
@@ -98,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         studentList = new ArrayList<Status>();
         handler = new Handler();
-        loadData(null);
+//        loadData(null);
 
 
         // use this setting to improve performance if you know that changes
@@ -115,9 +124,6 @@ public class MainActivity extends AppCompatActivity {
 
         // set the adapter object to the Recyclerview
         mRecyclerView.setAdapter(mAdapter);
-
-
-
 
 
         //Init layout
@@ -201,9 +207,17 @@ public class MainActivity extends AppCompatActivity {
 //        navigationView.addHeaderView(header);
 
 
+        //Init newStatus Card
+
+         newContentET = (EditText) findViewById(R.id.newContentET);
+         avatarNC = (CircleImageView) findViewById(R.id.avatarNC);
+         nameNC = (TextView) findViewById(R.id.nameNC);
+         userNameNC = (TextView) findViewById(R.id.userNameNC);
+
+
         // Initializing Drawer Layout and ActionBarToggle
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.openDrawer, R.string.closeDrawer){
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
 
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -225,17 +239,37 @@ public class MainActivity extends AppCompatActivity {
         //calling sync state is necessay or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fabSend = (FloatingActionButton) findViewById(R.id.fabSend);
+
+
+        fabSend.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_send_white_24dp));
+        fabSend.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                Intent intent = new Intent(MainActivity.this, NewStatus.class);
-                startActivity(intent);
+            public void onClick(View v) {
+                com.roundstarstudio.maciej.okon.activities.api.model.NewStatus status =
+                        new com.roundstarstudio.maciej.okon.activities.api.model.NewStatus(newContentET.getText().toString());
+                sendToServer(status);
+
+                findViewById(R.id.newStatus).setVisibility(View.GONE);
+                fabSend.setVisibility(View.GONE);
+                fab.setVisibility(View.VISIBLE);
             }
         });
 
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//                Intent intent = new Intent(MainActivity.this, NewStatus.class);
+//                startActivity(intent);
+                findViewById(R.id.newStatus).setVisibility(View.VISIBLE);
+                fab.setVisibility(View.GONE);
+                fabSend.setVisibility(View.VISIBLE);
+            }
+        });
 
 
         //Init LocalStore, we need to pass Context
@@ -246,28 +280,25 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLoadMore() {
 
-                if (mSwipeRefreshLayout != null && !mSwipeRefreshLayout.isRefreshing()) {
-                    //add null , so the adapter will check view_type and show progress bar at bottom
-                    studentList.add(null);
-                    mAdapter.notifyItemInserted(studentList.size() - 1);
+
+                //add null , so the adapter will check view_type and show progress bar at bottom
+                studentList.add(null);
+                mAdapter.notifyItemInserted(studentList.size() - 1);
 
 
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            //   remove progress item
-                            studentList.remove(studentList.size() - 1);
-                            mAdapter.notifyItemRemoved(studentList.size());
-                            //add items one by one
-                            int start = studentList.get(studentList.size() - 1).getId();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        //   remove progress item
+                        studentList.remove(studentList.size() - 1);
+                        mAdapter.notifyItemRemoved(studentList.size());
+                        //add items one by one
+                        int start = studentList.get(studentList.size() - 1).getId();
 //                        int end = start + 20;
 
-                            loadData(start);
-
-
-                        }
-                    });
-                }
+                        loadData(start);
+                    }
+                });
             }
         });
 
@@ -275,7 +306,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
 
-                loadData(null);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        int size = studentList.size();
+                        studentList.clear();
+                        mAdapter.notifyItemRangeRemoved(0, size);
+                        loadData(null);
+                        mSwipeRefreshLayout.setRefreshing(false);
+
+
+                    }
+                });
             }
         });
 
@@ -292,27 +334,49 @@ public class MainActivity extends AppCompatActivity {
                     .getAccessToken())
                     .getOkHttpClient();
 
+
+            loadData(null);
             loadUserInfo();
 
+
         } else {
-            Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivityForResult(intent, 1);
             //startActivity(new Intent(MainActivity.this,LoginActivity.class));
         }
         System.out.println(">>>>>>>>>> ON START");
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        clearData();
+        System.out.println("ON RESTARTTTTT");
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        System.out.println("ON STOOOP");
+    }
 
     private boolean authenticate() {
         return userLocalStore.getUserLoggedIn();
+    }
+
+    public void clearData() {
+        int size = this.studentList.size();
+        if (size > 0) {
+            studentList.clear();
+            mAdapter.notifyItemRangeRemoved(0, size);
+        }
     }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
-            if(resultCode == Activity.RESULT_OK){
+            if (resultCode == Activity.RESULT_OK) {
 
                 System.out.println(">>>>>>>>>>>>ON RESULT");
             }
@@ -335,11 +399,11 @@ public class MainActivity extends AppCompatActivity {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(OkonService.ENDPOINT)
                 .addConverterFactory(GsonConverterFactory.create(gson))
-//                .client(authClient)
+                .client(authClient)
                 .build();
 
         OkonService okonService = retrofit.create(OkonService.class);
-        Call<List<Status>> call =  okonService.getFeed(2, null, id);  //TODO Zmienic limit z 2 !!!
+        Call<List<Status>> call = okonService.getFeed(10, null, id);  //TODO Zmienic limit z 2 !!!
 
         call.enqueue(new Callback<List<Status>>() {
             @Override
@@ -359,6 +423,8 @@ public class MainActivity extends AppCompatActivity {
 
                     System.out.println(statusCode);
 
+                } else if (response.code() == 401) {
+                    RevokeUserToken();
                 } else {
                     System.out.println("HIUSTON MAMAY PROBLEM z uzytkownikiem");
                     //TODO catch code error
@@ -374,8 +440,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         });
-        mSwipeRefreshLayout.setRefreshing(false);
-
     }
 
     private void loadUserInfo() {
@@ -405,6 +469,8 @@ public class MainActivity extends AppCompatActivity {
 
                     usernameTV.setText(user.getFullName());
                     emailTV.setText(user.getEmail());
+
+
                     //Loading avatar in header
                     Glide.with(avatar.getContext())
                             .load(user.getGravatar_url())
@@ -412,7 +478,23 @@ public class MainActivity extends AppCompatActivity {
                             .crossFade()
                             .into(avatar);
 
+
+                    //NewStatusCard text
+
+                    nameNC.setText(user.getFullName());
+                    userNameNC.setText(user.getUsername());
+
+                    Glide.with(avatar.getContext())
+                            .load(user.getGravatar_url())
+                            .centerCrop()
+                            .crossFade()
+                            .into(avatarNC);
+
+
                     System.out.println(statusCode);
+
+                } else if (response.code() == 401) {
+                    System.out.println("401 w loadUserInfo");
 
                 } else {
                     Snackbar snackbar = Snackbar
@@ -430,6 +512,64 @@ public class MainActivity extends AppCompatActivity {
                 snackbar.show();
                 t.printStackTrace();
             }
+        });
+    }
+
+    private void RevokeUserToken() {
+        System.out.println("REVOKE USER TOKEN: 401");
+//        studentList.clear();
+        //Revoke access token
+        userLocalStore.clearUserData();
+        onStart();
+    }
+
+
+    private void sendToServer(com.roundstarstudio.maciej.okon.activities.api.model.NewStatus user) {
+
+        OkHttpClient authClient = new AuthInterceptor(userLocalStore
+                .getAccessToken())
+                .getOkHttpClient();
+
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(OkonService.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(authClient)
+                .build();
+
+        OkonService apiService =
+                retrofit.create(OkonService.class);
+
+        Call<com.roundstarstudio.maciej.okon.activities.api.model.NewStatus> call = apiService.createUser(user);
+
+        call.enqueue(new Callback<com.roundstarstudio.maciej.okon.activities.api.model.NewStatus>() {
+            @Override
+            public void onResponse(Response<com.roundstarstudio.maciej.okon.activities.api.model.NewStatus> response,
+                                   Retrofit retrofit) {
+
+                if (response.isSuccess()) {
+                    int statusCode = response.code();
+                    System.out.println(statusCode);
+                    Toast.makeText(MainActivity.this,
+                            "Utworzono!", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    System.out.println("HIUSTON MAMAY PROBLEM z uzytkownikiem");
+                    //TODO catch code error
+                }
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                System.out.println("Problem z polaczeniem");
+                t.printStackTrace();
+            }
+
+
         });
     }
 }
