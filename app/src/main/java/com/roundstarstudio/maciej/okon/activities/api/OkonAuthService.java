@@ -17,7 +17,7 @@ public interface OkonAuthService {
     //TODO Revokes the given token, requires authentication (logout?)
     @FormUrlEncoded
     @POST("/oauth/revoke")
-    Call<AccessToken> createUser(@Field("token") String access_token);
+    Call<AccessToken> revokeAccess(@Field("token") String access_token);
 
     @FormUrlEncoded
     @POST("/oauth/token")
