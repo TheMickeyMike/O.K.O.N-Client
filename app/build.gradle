@@ -32,6 +32,7 @@ android {
             buildConfigField 'String', 'GRANT_TYPE', GRANT_TYPE
         }
     }
+    sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
 }
 
 dependencies {

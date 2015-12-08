@@ -2,6 +2,7 @@ package com.roundstarstudio.maciej.okon.activities.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -120,7 +121,7 @@ public class DataAdapter extends RecyclerView.Adapter{
 
             ((StudentViewHolder) holder).tvFullName.setText(singleStudent.getUser().getFullName());
 
-            ((StudentViewHolder) holder).tvUserName.setText(singleStudent.getUser().getUsername());
+            ((StudentViewHolder) holder).tvUserName.setText("@" + singleStudent.getUser().getUsername());
 
             ((StudentViewHolder) holder).tvDate.setText(ConvertDate(singleStudent.getCreatedAt()));
 
@@ -178,6 +179,15 @@ public class DataAdapter extends RecyclerView.Adapter{
             tvDate = (TextView) v.findViewById(R.id.date);
 
             avatar = (CircleImageView) v.findViewById(R.id.profile_image);
+
+            Typeface roboto_light = Typeface.createFromAsset(v.getContext().getAssets(),"fonts/Roboto-Light.ttf");
+            Typeface roboto_regular = Typeface.createFromAsset(v.getContext().getAssets(),"fonts/Roboto-Medium.ttf");
+            this.tvFullName.setTypeface(roboto_regular);
+            this.tvContent.setTypeface(roboto_light);
+            this.tvUserName.setTypeface(roboto_light);
+            this.tvDate.setTypeface(roboto_light);
+
+
 
             v.setOnClickListener(new View.OnClickListener() {
 
