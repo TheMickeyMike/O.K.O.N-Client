@@ -89,8 +89,8 @@
       <file leaf-file-name="HomeActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/roundstarstudio/maciej/okon/activities/ui/activities/HomeActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="3.934729">
-              <caret line="261" column="4" selection-start-line="261" selection-start-column="4" selection-end-line="261" selection-end-column="4" />
+            <state vertical-scroll-proportion="5.91133">
+              <caret line="368" column="46" selection-start-line="368" selection-start-column="46" selection-end-line="368" selection-end-column="46" />
               <folding>
                 <element signature="e#6021#6040#0" expanded="true" />
                 <element signature="e#6058#6078#0" expanded="true" />
@@ -98,8 +98,8 @@
                 <element signature="e#7164#7564#0" expanded="true" />
                 <element signature="e#7563#7564#0" expanded="true" />
                 <element signature="e#7589#7590#0" expanded="true" />
-                <element signature="e#11136#11594#0" expanded="true" />
-                <element signature="e#11593#11594#0" expanded="true" />
+                <element signature="e#11132#11590#0" expanded="true" />
+                <element signature="e#11589#11590#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -2693,8 +2693,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/roundstarstudio/maciej/okon/activities/ui/activities/HomeActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="3.934729">
-          <caret line="261" column="4" selection-start-line="261" selection-start-column="4" selection-end-line="261" selection-end-column="4" />
+        <state vertical-scroll-proportion="5.91133">
+          <caret line="368" column="46" selection-start-line="368" selection-start-column="46" selection-end-line="368" selection-end-column="46" />
           <folding>
             <element signature="e#6021#6040#0" expanded="true" />
             <element signature="e#6058#6078#0" expanded="true" />
@@ -2702,8 +2702,8 @@
             <element signature="e#7164#7564#0" expanded="true" />
             <element signature="e#7563#7564#0" expanded="true" />
             <element signature="e#7589#7590#0" expanded="true" />
-            <element signature="e#11136#11594#0" expanded="true" />
-            <element signature="e#11593#11594#0" expanded="true" />
+            <element signature="e#11132#11590#0" expanded="true" />
+            <element signature="e#11589#11590#0" expanded="true" />
           </folding>
         </state>
       </provider>
