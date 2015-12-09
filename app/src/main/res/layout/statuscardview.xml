@@ -8,36 +8,36 @@
     <!-- A CardView that contains a TextView -->
 
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_margin="8dp"
             android:id="@+id/profile_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_margin="8dp"
             android:src="@drawable/profile_image"
             app:civ_border_color="#9B9B9B"
-            app:civ_border_width="1dp" />
-    </LinearLayout>
+            app:civ_border_width="0dp" />
+
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-           android:layout_margin="8dp">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/full_name"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Lisa White"
-                android:textColor="#333333"
+                android:textColor="@color/niceBlue"
                 android:textStyle="bold"
                 android:typeface="sans" />
 
@@ -48,24 +48,46 @@
                 android:layout_marginLeft="8dp"
                 android:text="Lisa_official" />
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp">
+
             <TextView
-                android:id="@+id/date"
+                android:id="@+id/content"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="end"
-                android:text="Nov 17" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="This is my first tweet"
+                android:textColor="@color/almostBlack" />
+
+
         </LinearLayout>
 
         <TextView
-            android:layout_marginLeft="8dp"
-            android:layout_marginBottom="8dp"
-            android:id="@+id/content"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="This is my first tweet"
-            android:textColor="#000000" />
+            android:text="Edit"
+            android:textColor="@color/niceBlue" />
 
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|right"
+            android:layout_marginRight="8dp"
+            android:text="Nov 17" />
     </LinearLayout>
 
 

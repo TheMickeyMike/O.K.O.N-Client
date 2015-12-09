@@ -2,6 +2,7 @@ package com.roundstarstudio.maciej.okon.activities.ui.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
@@ -108,6 +109,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         // Initializing Toolbar and setting it as the actionbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Feed");
         setSupportActionBar(toolbar);
 
         // Init Swipe to refresh
@@ -229,7 +231,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onRestart() {
         super.onRestart();
-        clearData();
+        //clearData();  //TODO
         System.out.println("ON RESTARTTTTT");
     }
 

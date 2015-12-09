@@ -180,9 +180,10 @@ public class DataAdapter extends RecyclerView.Adapter{
 
             avatar = (CircleImageView) v.findViewById(R.id.profile_image);
 
-            Typeface roboto_light = Typeface.createFromAsset(v.getContext().getAssets(),"fonts/Roboto-Light.ttf");
-            Typeface roboto_regular = Typeface.createFromAsset(v.getContext().getAssets(),"fonts/Roboto-Medium.ttf");
-            this.tvFullName.setTypeface(roboto_regular);
+            Typeface roboto_light = Typeface.createFromAsset(v.getContext().getAssets(),"fonts/Geometria/Geometria-Light.otf");
+            Typeface roboto_medium = Typeface.createFromAsset(v.getContext().getAssets(),"fonts/Geometria/Geometria-Medium.otf");
+            Typeface roboto_thin = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/Geometria/Geometria-Thin.otf");
+            this.tvFullName.setTypeface(roboto_medium);
             this.tvContent.setTypeface(roboto_light);
             this.tvUserName.setTypeface(roboto_light);
             this.tvDate.setTypeface(roboto_light);
@@ -238,24 +239,24 @@ public class DataAdapter extends RecyclerView.Adapter{
 
         if (daysBetween > 0) {
             if (daysBetween == 1)
-                return daysBetween + " day ago";
+                return daysBetween + "d";
             else
-                return daysBetween + " days ago";
+                return daysBetween + "d";
         } else if (hoursBetween > 0) {
             if (hoursBetween == 1)
-                return  hoursBetween + " hour ago";
+                return  hoursBetween + "h";
             else
-                return hoursBetween + " hours ago";
+                return hoursBetween + "h";
         } else if (minutesBetween > 0) {
             if (minutesBetween == 1)
-                return minutesBetween + " minute ago";
+                return minutesBetween + "m";
             else
-                return minutesBetween + " minutes ago";
+                return minutesBetween + "m";
         } else if (secondsBetween > 0) {
             if (secondsBetween == 1)
-                return secondsBetween + " second ago";
+                return secondsBetween + "s";
             else
-                return secondsBetween + " seconds ago";
+                return secondsBetween + "s";
         } else return null;
     }
 }
