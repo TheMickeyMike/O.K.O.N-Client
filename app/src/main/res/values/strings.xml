@@ -39,4 +39,5 @@ tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo</string>
     <string name="title_activity_new_status">NewStatus</string>
     <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_pop_new_status">PopNewStatus</string>
 </resources>

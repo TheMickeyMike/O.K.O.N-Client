@@ -53,6 +53,9 @@ import retrofit.Retrofit;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnLoadMoreListener, View.OnClickListener{
 
+    static final int NEW_STATUS_REQUEST = 1;  // The request code
+    static final int EDIT_STATUS_REQUEST = 2;  // The request code
+
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     //NewStatusCard
@@ -89,7 +92,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     protected Handler handler;
 
-    private FloatingActionButton fab, fabSend;
+    public FloatingActionButton fab, fabSend;
 
 
     @Override
@@ -249,18 +252,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
-            if (resultCode == Activity.RESULT_OK) {
 
-                System.out.println(">>>>>>>>>>>>ON RESULT");
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                //Write your code if there's no result
-            }
-        }
-    }
 
 
     @Override
@@ -340,9 +332,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
-                findViewById(R.id.newStatus).setVisibility(View.VISIBLE);
-                fab.setVisibility(View.GONE);
-                fabSend.setVisibility(View.VISIBLE);
+                Intent intent = new Intent(this, PopNewStatus.class);
+                startActivityForResult(intent, 1);
+
+                //startActivity(new Intent(this,PopNewStatus.class));
+//                findViewById(R.id.newStatus).setVisibility(View.VISIBLE);
+//                fab.setVisibility(View.GONE);
+//                fabSend.setVisibility(View.VISIBLE);
                 break;
             case R.id.fabSend:
                 com.roundstarstudio.maciej.okon.activities.api.model.NewStatus status =
@@ -356,6 +352,31 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == NEW_STATUS_REQUEST) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                String newStatusContent = data.getStringExtra("CONTENT");
+                System.out.println(">>>>>>>>>>>>ON RESULT");
+                System.out.println(newStatusContent);
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        } else if (requestCode == EDIT_STATUS_REQUEST) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                String newStatusContent = data.getStringExtra("CONTENT");
+                System.out.println(">>>>>>>>>>>>ON RESULT");
+                System.out.println("Updating status: "  + newStatusContent);
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+    }
+
+
 
     // load initial data
     private void loadData(Integer id) {

@@ -48,6 +48,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.ui.activities.PopNewStatus"
+            android:label="@string/title_activity_pop_new_status"
+            android:theme="@style/AppTheme.PopUp"></activity>
     </application>
 
 </manifest>

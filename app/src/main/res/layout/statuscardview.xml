@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="2dp"
-    android:background="#FFFF">
+    android:background="#FFFF"
+    android:id="@+id/card_view">
 
     <!-- A CardView that contains a TextView -->
 
@@ -67,6 +68,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/editTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Edit"
