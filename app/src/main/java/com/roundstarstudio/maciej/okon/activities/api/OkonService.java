@@ -38,7 +38,8 @@ public interface OkonService {
     Call<NewStatus> createUser(@Body NewStatus status);
 
     @PUT("statuses/{id}")
-    Call<Status> updateStatus(@Path("id") String status_id);
+    Call<Boolean> updateStatus(@Path("id") String status_id,
+                              @Body NewStatus status);
 
     @DELETE("statuses/{id}")
     Call<Status> deleteStatus(@Path("id") String status_id);

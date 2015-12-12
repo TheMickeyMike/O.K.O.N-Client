@@ -31,9 +31,8 @@ import com.google.gson.GsonBuilder;
 import com.roundstarstudio.maciej.okon.R;
 import com.roundstarstudio.maciej.okon.activities.api.AuthInterceptor;
 import com.roundstarstudio.maciej.okon.activities.api.OkonService;
-import com.roundstarstudio.maciej.okon.activities.api.model.AccessToken;
-import com.roundstarstudio.maciej.okon.activities.api.model.Status;
-import com.roundstarstudio.maciej.okon.activities.api.model.User;
+import com.roundstarstudio.maciej.okon.activities.api.model.*;
+import com.roundstarstudio.maciej.okon.activities.api.model.NewStatus;
 import com.roundstarstudio.maciej.okon.activities.ui.activities.recyclerViewLast.recActivity;
 import com.roundstarstudio.maciej.okon.activities.ui.activities.recyclerViewPt.CardViewActivity;
 import com.roundstarstudio.maciej.okon.activities.ui.adapters.OnLoadMoreListener;
@@ -58,6 +57,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+    private int my_id = 0;
     //NewStatusCard
     EditText newContentET;
     CircleImageView avatarNC;
@@ -119,6 +119,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
 
+        loadUserInfo();
+
         /**
          * Init Recycler View
          */
@@ -139,17 +141,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // create an Object for Adapter
-        mAdapter = new DataAdapter(studentList, mRecyclerView);
+        mAdapter = new DataAdapter(studentList, mRecyclerView, my_id);
         // set the adapter object to the Recyclerview
         mRecyclerView.setAdapter(mAdapter);
+
 
         //Set OnLoadMore Listener
         mAdapter.setOnLoadMoreListener(this);
 
 
-
         loadData(null);
-        loadUserInfo();
+
 
 
         //Init HomeActivity CoordinatorLayout
@@ -227,7 +229,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
-
+        System.out.println("USSSSEEERRR ID :" + my_id);
         System.out.println(">>>>>>>>>> ON START");
     }
 
@@ -333,7 +335,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         switch (v.getId()) {
             case R.id.fab:
                 Intent intent = new Intent(this, PopNewStatus.class);
-                startActivityForResult(intent, 1);
+                intent.putExtra("requestCode", NEW_STATUS_REQUEST);
+                startActivityForResult(intent, NEW_STATUS_REQUEST);
 
                 //startActivity(new Intent(this,PopNewStatus.class));
 //                findViewById(R.id.newStatus).setVisibility(View.VISIBLE);
@@ -359,6 +362,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             if (resultCode == Activity.RESULT_OK && data != null) {
                 String newStatusContent = data.getStringExtra("CONTENT");
                 System.out.println(">>>>>>>>>>>>ON RESULT");
+                sendToServer(new NewStatus(newStatusContent));
                 System.out.println(newStatusContent);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
@@ -367,7 +371,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } else if (requestCode == EDIT_STATUS_REQUEST) {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 String newStatusContent = data.getStringExtra("CONTENT");
+                int status_id = data.getIntExtra("ID",-1);
                 System.out.println(">>>>>>>>>>>>ON RESULT");
+                updateStatus(status_id,new NewStatus(newStatusContent));
                 System.out.println("Updating status: "  + newStatusContent);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
@@ -457,6 +463,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 if (response.isSuccess()) {
                     int statusCode = response.code();
                     User user = response.body();
+                    my_id = user.getId();
                     System.out.println(user.getFullName() + "  " + user.getEmail());
 
                     usernameTV.setText(user.getFullName());
@@ -547,6 +554,55 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     System.out.println(statusCode);
                     Toast.makeText(HomeActivity.this,
                             "Utworzono!", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    System.out.println("HIUSTON MAMAY PROBLEM z uzytkownikiem");
+                    //TODO catch code error
+                }
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                System.out.println("Problem z polaczeniem");
+                t.printStackTrace();
+            }
+
+
+        });
+    }
+
+    private void updateStatus(int status_id, com.roundstarstudio.maciej.okon.activities.api.model.NewStatus status) {
+
+        OkHttpClient authClient = new AuthInterceptor(userLocalStore
+                .getAccessToken())
+                .getOkHttpClient();
+
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(OkonService.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(authClient)
+                .build();
+
+        OkonService apiService =
+                retrofit.create(OkonService.class);
+
+        Call<Boolean> call = apiService.updateStatus(Integer.toString(status_id),status);
+
+        call.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Response<Boolean> response,
+                                   Retrofit retrofit) {
+
+                if (response.isSuccess()) {
+                    int statusCode = response.code();
+                    System.out.println(statusCode);
+                    Toast.makeText(HomeActivity.this,
+                            "Edytowano!", Toast.LENGTH_SHORT).show();
 
                 } else {
                     System.out.println("HIUSTON MAMAY PROBLEM z uzytkownikiem");

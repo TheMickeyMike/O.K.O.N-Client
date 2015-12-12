@@ -36,10 +36,16 @@ public class PopNewStatus extends Activity implements View.OnClickListener{
 
     private UserLocalStore userLocalStore;
 
+    int user_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String user_id = getIntent().getExtras().getString("USER_ID");
+        int requestCode = getIntent().getExtras().getInt("requestCode");
+        if (requestCode == HomeActivity.EDIT_STATUS_REQUEST) {
+            user_id = getIntent().getExtras().getInt("USER_ID");
+        }
+        System.out.println("USERRR ID: " + user_id);
         
         setContentView(R.layout.activity_pop_new_status);
 
@@ -68,6 +74,7 @@ public class PopNewStatus extends Activity implements View.OnClickListener{
             case R.id.shareBtn:
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("CONTENT",content.getText().toString());
+                returnIntent.putExtra("ID",user_id);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish(); // Finish Activity
                 break;

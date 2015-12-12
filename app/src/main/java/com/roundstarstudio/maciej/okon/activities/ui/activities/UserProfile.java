@@ -117,7 +117,7 @@ public class UserProfile extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // create an Object for Adapter
-        mAdapter = new DataAdapter(studentList, mRecyclerView);
+        mAdapter = new DataAdapter(studentList, mRecyclerView,-1); //TODO
 
         // set the adapter object to the Recyclerview
         mRecyclerView.setAdapter(mAdapter);

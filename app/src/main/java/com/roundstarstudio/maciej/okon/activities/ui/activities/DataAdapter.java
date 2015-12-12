@@ -54,11 +54,13 @@ public class DataAdapter extends RecyclerView.Adapter {
     private int lastVisibleItem, totalItemCount;
     private boolean loading;
     private OnLoadMoreListener onLoadMoreListener;
+    private int user_id;
 
 
-    public DataAdapter(List<Status> students, RecyclerView recyclerView) {
+    public DataAdapter(List<Status> students, RecyclerView recyclerView, int user_id) {
 
-        studentList = students;
+        this.studentList = students;
+        this.user_id = user_id;
 
         if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
 
@@ -129,6 +131,10 @@ public class DataAdapter extends RecyclerView.Adapter {
 
             ((StudentViewHolder) holder).student = singleStudent;
 
+            if (singleStudent.getId() != user_id) {
+                ((StudentViewHolder) holder).editTV.setVisibility(View.GONE);
+            }
+
             Glide.with(((StudentViewHolder) holder).avatar.getContext())
                     .load(singleStudent.getUser().getGravatar_url())
                     .centerCrop()
@@ -192,6 +198,7 @@ public class DataAdapter extends RecyclerView.Adapter {
 
             avatar = (CircleImageView) v.findViewById(R.id.profile_image);
 
+
             //Init newStatus Card
             newContentET = (EditText) v.findViewById(R.id.newContentET);
             avatarNC = (CircleImageView) v.findViewById(R.id.avatarNC);
@@ -211,6 +218,7 @@ public class DataAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     System.out.println("CLICK");
                     Intent intent = new Intent(v.getContext(), PopNewStatus.class);
+                    intent.putExtra("requestCode", HomeActivity.EDIT_STATUS_REQUEST);
                     intent.putExtra("USER_ID",student.getId());
                     ((Activity) v.getContext()).startActivityForResult(intent, HomeActivity.EDIT_STATUS_REQUEST);
                 }
