@@ -1,35 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="190dp"
-    android:background="@drawable/background_material"
+    android:layout_height="170dp"
+    android:background="#FFFF"
     android:orientation="vertical">
 
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/profile_image"
-        android:layout_width="76dp"
-        android:layout_height="76dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:src="@drawable/profile_image"
         app:civ_border_color="#FF000000"
         android:layout_marginLeft="24dp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="24dp" />
+        android:layout_centerInParent="true"/>
 
     <TextView
         android:id="@+id/emailTeV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Akash.bangad93@gmail.com"
-        android:gravity="left"
+        android:textColor="#000"
         android:layout_marginBottom="8dp"
         android:textSize="14sp"
-        android:textColor="#fff"
+
         android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@id/profile_image"
-        android:layout_alignStart="@id/profile_image" />
+        android:layout_centerInParent="true"/>
 
     <TextView
         android:id="@+id/usernameTeV"
@@ -37,13 +33,12 @@
         android:layout_height="wrap_content"
         android:text="Akash Bangad"
         android:textSize="14sp"
-        android:textColor="#FFF"
+        android:textColor="@color/niceBlue"
         android:textStyle="bold"
         android:gravity="left"
         android:paddingBottom="4dp"
         android:layout_above="@id/emailTeV"
-        android:layout_alignLeft="@id/emailTeV"
-        android:layout_alignStart="@id/emailTeV" />
+        android:layout_centerInParent="true" />
 
 
 

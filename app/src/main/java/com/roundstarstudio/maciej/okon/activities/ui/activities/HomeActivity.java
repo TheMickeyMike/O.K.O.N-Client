@@ -18,6 +18,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -94,12 +95,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     public FloatingActionButton fab, fabSend;
 
+    private Typeface roboto_light, roboto_medium, roboto_bold;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        //Init fonts
+        roboto_light = Typeface.createFromAsset(getAssets(), "fonts/Geometria/Geometria-Light.otf");
+        roboto_bold = Typeface.createFromAsset(getAssets(), "fonts/Geometria/Geometria-Bold.otf");
+        roboto_medium = Typeface.createFromAsset(getAssets(), "fonts/Geometria/Geometria-Medium.otf");
+
 
         //Init LocalStore, we need to pass Context
         userLocalStore = new UserLocalStore(this);
@@ -118,8 +127,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         // Init Swipe to refresh
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
-
-        loadUserInfo();
 
         /**
          * Init Recycler View
@@ -141,13 +148,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // create an Object for Adapter
-        mAdapter = new DataAdapter(studentList, mRecyclerView, my_id);
+        mAdapter = new DataAdapter(studentList, mRecyclerView);
         // set the adapter object to the Recyclerview
         mRecyclerView.setAdapter(mAdapter);
 
 
         //Set OnLoadMore Listener
         mAdapter.setOnLoadMoreListener(this);
+
+        loadUserInfo();
 
 
         loadData(null);
@@ -173,14 +182,19 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         avatar = (CircleImageView) header.findViewById(R.id.profile_image);
         usernameTV = (TextView) header.findViewById(R.id.usernameTeV);
         emailTV = (TextView) header.findViewById(R.id.emailTeV);
+        //Set Font and
+        usernameTV.setTypeface(roboto_bold);
+        emailTV.setTypeface(roboto_light);
 
         // Initializing Drawer Layout and ActionBarToggle
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        navigationView.getMenu().findItem(R.id.feed).setChecked(true);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this,
                 drawerLayout,
                 toolbar,
                 R.string.openDrawer,
                 R.string.closeDrawer);
+
 
         //Setting the actionbarToggle to drawer layout
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
@@ -271,7 +285,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
             //Replacing the main content with ContentFragment Which is our Inbox View;
-            case R.id.inbox:
+            case R.id.feed:
                 Toast.makeText(getApplicationContext(), "Inbox Selected", Toast.LENGTH_SHORT).show();
 //                        ContentFragment fragment = new ContentFragment();
 //                        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -304,6 +318,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 return true;
 
         }
+    }
+
+    private void setUpDrawerUI() {
+
     }
 
     @Override
@@ -436,9 +454,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 t.printStackTrace();
             }
 
-
         });
     }
+
 
     private void loadUserInfo() {
 
@@ -463,7 +481,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 if (response.isSuccess()) {
                     int statusCode = response.code();
                     User user = response.body();
+                    mAdapter.setUser_id(user.getId());
                     my_id = user.getId();
+                    System.out.println("FROM METHOD USER ID" + my_id);
                     System.out.println(user.getFullName() + "  " + user.getEmail());
 
                     usernameTV.setText(user.getFullName());

@@ -4,9 +4,9 @@
     <group android:checkableBehavior="single">
         @android:drawable/ic_menu_edit
         <item
-            android:id="@+id/inbox"
+            android:id="@+id/feed"
             android:checked="false"
-            android:icon="@drawable/ic_inbox_black"
+            android:icon="@drawable/ic_view_stream_black_48dp"
             android:title="@string/inbox_string" />
 
         <item

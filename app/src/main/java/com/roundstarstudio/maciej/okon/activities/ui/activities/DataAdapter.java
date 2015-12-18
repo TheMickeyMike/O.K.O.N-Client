@@ -57,7 +57,7 @@ public class DataAdapter extends RecyclerView.Adapter {
     private int user_id;
 
 
-    public DataAdapter(List<Status> students, RecyclerView recyclerView, int user_id) {
+    public DataAdapter(List<Status> students, RecyclerView recyclerView) {
 
         this.studentList = students;
         this.user_id = user_id;
@@ -130,9 +130,16 @@ public class DataAdapter extends RecyclerView.Adapter {
             ((StudentViewHolder) holder).tvDate.setText(ConvertDate(singleStudent.getCreatedAt()));
 
             ((StudentViewHolder) holder).student = singleStudent;
+            System.out.println(singleStudent.getUser().getId());
 
-            if (singleStudent.getId() != user_id) {
-                ((StudentViewHolder) holder).editTV.setVisibility(View.GONE);
+
+            if (singleStudent.getUser().getId() == user_id) {
+                System.out.println("I m IN");
+                        ((StudentViewHolder) holder).editTV.setVisibility(View.VISIBLE);
+            }
+
+            if (!singleStudent.getCreatedAt().equals(singleStudent.getUpdatedAt())) {
+                ((StudentViewHolder) holder).edited.setVisibility(View.VISIBLE);
             }
 
             Glide.with(((StudentViewHolder) holder).avatar.getContext())
@@ -145,6 +152,10 @@ public class DataAdapter extends RecyclerView.Adapter {
         } else {
             ((ProgressViewHolder) holder).progressBar.setIndeterminate(true);
         }
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 
     public void setLoaded() {
@@ -181,7 +192,7 @@ public class DataAdapter extends RecyclerView.Adapter {
         public EditText newContentET;
         public CircleImageView avatarNC;
         public TextView nameNC;
-        TextView userNameNC;
+        TextView userNameNC, edited;
 
         public StudentViewHolder(View v) {
             super(v);
@@ -204,6 +215,7 @@ public class DataAdapter extends RecyclerView.Adapter {
             avatarNC = (CircleImageView) v.findViewById(R.id.avatarNC);
             nameNC = (TextView) v.findViewById(R.id.nameNC);
             userNameNC = (TextView) v.findViewById(R.id.userNameNC);
+            edited = (TextView) v.findViewById(R.id.edited);
 
             Typeface roboto_light = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/Geometria/Geometria-Light.otf");
             Typeface roboto_medium = Typeface.createFromAsset(v.getContext().getAssets(), "fonts/Geometria/Geometria-Medium.otf");
@@ -212,6 +224,7 @@ public class DataAdapter extends RecyclerView.Adapter {
             this.tvContent.setTypeface(roboto_light);
             this.tvUserName.setTypeface(roboto_light);
             this.tvDate.setTypeface(roboto_light);
+            this.edited.setTypeface(roboto_thin);
 
             editTV.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -220,7 +233,8 @@ public class DataAdapter extends RecyclerView.Adapter {
                     Intent intent = new Intent(v.getContext(), PopNewStatus.class);
                     intent.putExtra("requestCode", HomeActivity.EDIT_STATUS_REQUEST);
                     intent.putExtra("USER_ID",student.getId());
-                    ((Activity) v.getContext()).startActivityForResult(intent, HomeActivity.EDIT_STATUS_REQUEST);
+                    intent.putExtra("TEXT", student.getContent());
+                            ((Activity) v.getContext()).startActivityForResult(intent, HomeActivity.EDIT_STATUS_REQUEST);
                 }
             });
 
