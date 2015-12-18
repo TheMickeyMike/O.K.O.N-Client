@@ -1,6 +1,9 @@
 package com.roundstarstudio.maciej.okon.activities.api;
 
 import com.roundstarstudio.maciej.okon.activities.api.model.AccessToken;
+import com.roundstarstudio.maciej.okon.activities.api.model.Empty;
+
+import java.util.List;
 
 import retrofit.Call;
 
@@ -17,7 +20,7 @@ public interface OkonAuthService {
     //TODO Revokes the given token, requires authentication (logout?)
     @FormUrlEncoded
     @POST("/oauth/revoke")
-    Call<AccessToken> revokeAccess(@Field("token") String access_token);
+    Call<Empty> revokeAccess(@Field("token") String access_token);
 
     @FormUrlEncoded
     @POST("/oauth/token")

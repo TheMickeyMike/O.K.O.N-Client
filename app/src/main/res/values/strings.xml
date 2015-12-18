@@ -11,9 +11,9 @@
     <string name="sent_mail_string">Sent mail</string>
     <string name="draft_string">Drafts</string>
     <string name="subheader">Subheader</string>
-    <string name="trash_string">Trash</string>
+    <string name="logout_string">Logout</string>
     <string name="all_mail_string">All mails</string>
-    <string name="spam_string">Spams</string>
+    <string name="settings_string">Settings</string>
     <string name="closeDrawer">Navigation View</string>
     <string name="openDrawer">Navigation View Closed</string>
     <string name="title_activity_login">LoginActivity</string>

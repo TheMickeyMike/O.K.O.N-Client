@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.roundstarstudio.maciej.okon.R;
 import com.roundstarstudio.maciej.okon.activities.api.AuthInterceptor;
+import com.roundstarstudio.maciej.okon.activities.api.OkonAuthService;
 import com.roundstarstudio.maciej.okon.activities.api.OkonService;
 import com.roundstarstudio.maciej.okon.activities.api.model.*;
 import com.roundstarstudio.maciej.okon.activities.api.model.NewStatus;
@@ -307,10 +308,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case R.id.allmail:
                 Toast.makeText(getApplicationContext(), "All Mail Selected", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.trash:
+            case R.id.logout:
+                revokeToken();
                 Toast.makeText(getApplicationContext(), "Trash Selected", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.spam:
+            case R.id.settings:
                 Toast.makeText(getApplicationContext(), "Spam Selected", Toast.LENGTH_SHORT).show();
                 return true;
             default:
@@ -397,6 +399,47 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    private void revokeToken() {
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .create();
+
+
+        // Set the custom client when building adapter
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(OkonService.ENDPOINT)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(authClient)
+                .build();
+
+        OkonAuthService okonAuthService = retrofit.create(OkonAuthService.class);
+        Call<Empty> call = okonAuthService.revokeAccess(userLocalStore.getAccessToken());
+
+        call.enqueue(new Callback<Empty>() {
+            @Override
+            public void onResponse(Response<Empty> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    int statusCode = response.code();
+                    System.out.println(response.body());
+                    userLocalStore.clearUserData();
+                    startActivity(new Intent(HomeActivity.this, MainActivity.class));
+                    finish();
+                } else {
+                    System.out.println("HIUSTON MAMAY PROBLEM z uzytkownikiem");
+                    //TODO catch code error, nigdy nie powinno zajsc bo serwer zawsze zwraca 200
+                }
+            }
+
+
+            @Override
+            public void onFailure(Throwable t) {
+                System.out.println("Problem z polaczeniem");
+                t.printStackTrace();
+            }
+
+        });
+
+    }
 
 
     // load initial data
@@ -511,6 +554,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                 } else if (response.code() == 401) {
                     System.out.println("401 w loadUserInfo");
+                    RevokeUserToken();
 
                 } else {
                     Snackbar snackbar = Snackbar
@@ -536,7 +580,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 //        studentList.clear();
         //Revoke access token
         userLocalStore.clearUserData();
-        onStart();
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
 
