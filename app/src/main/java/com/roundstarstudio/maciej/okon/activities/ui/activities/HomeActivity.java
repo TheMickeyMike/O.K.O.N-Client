@@ -320,9 +320,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void setUpDrawerUI() {
-
-    }
 
     @Override
     public void onLoadMore() {

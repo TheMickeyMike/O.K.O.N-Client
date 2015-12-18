@@ -60,7 +60,7 @@ public class DataAdapter extends RecyclerView.Adapter {
     public DataAdapter(List<Status> students, RecyclerView recyclerView) {
 
         this.studentList = students;
-        this.user_id = user_id;
+
 
         if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
 
@@ -118,6 +118,9 @@ public class DataAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof StudentViewHolder) {
+            //Hot Fix
+            ((StudentViewHolder) holder).editTV.setVisibility(View.GONE);
+            ((StudentViewHolder) holder).edited.setVisibility(View.GONE);
 
             Status singleStudent = (Status) studentList.get(position);
 

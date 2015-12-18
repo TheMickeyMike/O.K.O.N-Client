@@ -77,11 +77,13 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/roundstarstudio/maciej/okon/activities/ui/activities/HomeActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="184" column="22" selection-start-line="184" selection-start-column="22" selection-end-line="184" selection-end-column="22" />
+              <caret line="320" column="5" selection-start-line="320" selection-start-column="5" selection-end-line="320" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#6776#6795#0" expanded="true" />
                 <element signature="e#6813#6833#0" expanded="true" />
+                <element signature="e#11553#12011#0" expanded="true" />
+                <element signature="e#12010#12011#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -138,13 +140,13 @@
       <file leaf-file-name="DataAdapter.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/roundstarstudio/maciej/okon/activities/ui/activities/DataAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8089172">
-              <caret line="142" column="13" selection-start-line="142" selection-start-column="13" selection-end-line="142" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.46072188">
+              <caret line="120" column="21" selection-start-line="120" selection-start-column="21" selection-end-line="120" selection-end-column="21" />
               <folding>
-                <element signature="e#5674#5675#0" expanded="true" />
-                <element signature="e#5712#5713#0" expanded="true" />
-                <element signature="e#8042#8646#0" expanded="true" />
-                <element signature="e#8645#8646#0" expanded="true" />
+                <element signature="e#5813#5814#0" expanded="true" />
+                <element signature="e#5851#5852#0" expanded="true" />
+                <element signature="e#8181#8785#0" expanded="true" />
+                <element signature="e#8784#8785#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1724,8 +1726,8 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_home.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/menu/drawer.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/roundstarstudio/maciej/okon/activities/ui/activities/HomeActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/statuscardview.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/roundstarstudio/maciej/okon/activities/ui/activities/HomeActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/roundstarstudio/maciej/okon/activities/ui/activities/DataAdapter.java" />
       </list>
     </option>
@@ -2758,14 +2760,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/roundstarstudio/maciej/okon/activities/ui/activities/UserProfile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="268" column="23" selection-start-line="268" selection-start-column="23" selection-end-line="268" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/header.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-3.6206896">
@@ -2822,18 +2816,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/roundstarstudio/maciej/okon/activities/ui/activities/HomeActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="184" column="22" selection-start-line="184" selection-start-column="22" selection-end-line="184" selection-end-column="22" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#6776#6795#0" expanded="true" />
-            <element signature="e#6813#6833#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/statuscardview.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-12.413794">
@@ -2853,15 +2835,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/roundstarstudio/maciej/okon/activities/ui/activities/UserProfile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="268" column="23" selection-start-line="268" selection-start-column="23" selection-end-line="268" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/roundstarstudio/maciej/okon/activities/ui/activities/HomeActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="320" column="5" selection-start-line="320" selection-start-column="5" selection-end-line="320" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#6776#6795#0" expanded="true" />
+            <element signature="e#6813#6833#0" expanded="true" />
+            <element signature="e#11553#12011#0" expanded="true" />
+            <element signature="e#12010#12011#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/roundstarstudio/maciej/okon/activities/ui/activities/DataAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8089172">
-          <caret line="142" column="13" selection-start-line="142" selection-start-column="13" selection-end-line="142" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.46072188">
+          <caret line="120" column="21" selection-start-line="120" selection-start-column="21" selection-end-line="120" selection-end-column="21" />
           <folding>
-            <element signature="e#5674#5675#0" expanded="true" />
-            <element signature="e#5712#5713#0" expanded="true" />
-            <element signature="e#8042#8646#0" expanded="true" />
-            <element signature="e#8645#8646#0" expanded="true" />
+            <element signature="e#5813#5814#0" expanded="true" />
+            <element signature="e#5851#5852#0" expanded="true" />
+            <element signature="e#8181#8785#0" expanded="true" />
+            <element signature="e#8784#8785#0" expanded="true" />
           </folding>
         </state>
       </provider>
