@@ -617,6 +617,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     Toast.makeText(HomeActivity.this,
                             "Utworzono!", Toast.LENGTH_SHORT).show();
 
+                } else if (response.code() == 401) {
+                    System.out.println("401 w loadUserInfo");
+                    RevokeUserToken();
                 } else {
                     System.out.println("HIUSTON MAMAY PROBLEM z uzytkownikiem");
                     //TODO catch code error

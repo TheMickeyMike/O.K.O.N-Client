@@ -117,7 +117,8 @@ public class PopNewStatus extends Activity implements View.OnClickListener{
                     Toast.makeText(PopNewStatus.this,
                             "Utworzono!", Toast.LENGTH_SHORT).show();
 
-                } else {
+                }
+                else {
                     System.out.println("HIUSTON MAMAY PROBLEM z uzytkownikiem");
                     //TODO catch code error
                 }
@@ -133,4 +134,6 @@ public class PopNewStatus extends Activity implements View.OnClickListener{
 
         });
     }
+
+
 }
